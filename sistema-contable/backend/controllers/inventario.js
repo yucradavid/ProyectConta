@@ -1,9 +1,13 @@
 const db = require('../db/database');
 
 exports.createInventario = (req, res) => {
-    const { fecha, producto, cantidad, precioUnitario } = req.body;
+    const { producto, cantidad, precio } = req.body;
 
-    db.run('INSERT INTO inventario (fecha, producto, cantidad, precio_unitario) VALUES (?, ?, ?, ?)', [fecha, producto, cantidad, precioUnitario], function(err) {
+    if (!producto || isNaN(parseInt(cantidad)) || isNaN(parseFloat(precio))) {
+        return res.status(400).json({ error: 'Todos los campos son obligatorios y deben ser válidos.' });
+    }
+
+    db.run('INSERT INTO inventario (producto, cantidad, precio) VALUES (?, ?, ?)', [producto, cantidad, precio], function(err) {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
@@ -11,11 +15,11 @@ exports.createInventario = (req, res) => {
     });
 };
 
-exports.getAllInventarios = (req, res) => {
+exports.getAllInventario = (req, res) => {
     db.all('SELECT * FROM inventario', [], (err, rows) => {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
-        res.status(200).json({ inventarios: rows });
+        res.status(200).json({ inventario: rows });
     });
 };

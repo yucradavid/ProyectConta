@@ -1,25 +1,39 @@
 const express = require('express');
-const cors = require('cors');
 const bodyParser = require('body-parser');
-const ventasRouter = require('./routes/ventas');
-const comprasRouter = require('./routes/compras');
-const remuneracionesRouter = require('./routes/remuneraciones');
-const libroCajaRouter = require('./routes/libroCaja');
-const inventarioRouter = require('./routes/inventario');
+const cors = require('cors');
+const ventasController = require('./controllers/ventas');
+const comprasController = require('./controllers/compras');
+const inventarioController = require('./controllers/inventario');
+const libroCajaController = require('./controllers/libroCaja');
+const remuneracionesController = require('./controllers/remuneraciones');
 
 const app = express();
-const PORT = process.env.PORT || 1200;
+const port = 1200;
 
-app.use(cors());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
-app.use('/api/ventas', ventasRouter);
-app.use('/api/compras', comprasRouter);
-app.use('/api/remuneraciones', remuneracionesRouter);
-app.use('/api/libro-caja', libroCajaRouter);
-app.use('/api/inventario', inventarioRouter);
+// Rutas para ventas
+app.post('/api/ventas', ventasController.createVenta);
+app.get('/api/ventas', ventasController.getAllVentas);
+app.delete('/api/ventas/:id', ventasController.deleteVenta); // Eliminar venta por ID
+app.put('/api/ventas/:id', ventasController.updateVenta);    // Editar venta por ID
+// Rutas para compras
+app.post('/api/compras', comprasController.createCompra);
+app.get('/api/compras', comprasController.getAllCompras);
 
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+// Rutas para inventario
+app.post('/api/inventario', inventarioController.createInventario);
+app.get('/api/inventario', inventarioController.getAllInventario);
+
+// Rutas para libro de caja
+app.post('/api/libro-caja', libroCajaController.createLibroCaja);
+app.get('/api/libro-caja', libroCajaController.getAllLibroCaja);
+
+// Rutas para remuneraciones
+app.post('/api/remuneraciones', remuneracionesController.createRemuneracion);
+app.get('/api/remuneraciones', remuneracionesController.getAllRemuneraciones);
+
+app.listen(port, () => {
+    console.log(`Servidor API escuchando en http://localhost:${port}`);
 });

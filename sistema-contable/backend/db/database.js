@@ -13,7 +13,7 @@ const db = new sqlite3.Database(dbPath, (err) => {
 
 db.serialize(() => {
     // Crea las tablas si no existen
-    db.run("CREATE TABLE IF NOT EXISTS ventas (id INTEGER PRIMARY KEY AUTOINCREMENT, fecha TEXT, cliente TEXT, bi REAL, impuestos REAL, pt REAL)");
+    db.run("CREATE TABLE IF NOT EXISTS ventas (id INTEGER PRIMARY KEY AUTOINCREMENT, fecha TEXT, cliente TEXT, bi REAL, igv REAL, total REAL)");
     db.run(`
         CREATE TABLE IF NOT EXISTS compras (
             id INTEGER PRIMARY KEY AUTOINCREMENT,

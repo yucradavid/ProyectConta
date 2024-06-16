@@ -1,9 +1,13 @@
 const db = require('../db/database');
 
 exports.createRemuneracion = (req, res) => {
-    const { fecha, empleado, salario, beneficios, descuentos } = req.body;
+    const { fecha, empleado, salario, bonificaciones, descuentos } = req.body;
 
-    db.run('INSERT INTO remuneraciones (fecha, empleado, salario, beneficios, descuentos) VALUES (?, ?, ?, ?, ?)', [fecha, empleado, salario, beneficios, descuentos], function(err) {
+    if (!fecha || !empleado || isNaN(parseFloat(salario)) || isNaN(parseFloat(bonificaciones)) || isNaN(parseFloat(descuentos))) {
+        return res.status(400).json({ error: 'Todos los campos son obligatorios y deben ser válidos.' });
+    }
+
+    db.run('INSERT INTO remuneraciones (fecha, empleado, salario, bonificaciones, descuentos) VALUES (?, ?, ?, ?, ?)', [fecha, empleado, salario, bonificaciones, descuentos], function(err) {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
